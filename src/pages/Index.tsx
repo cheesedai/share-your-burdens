@@ -6,7 +6,8 @@ import BurdenForm from '@/components/BurdenForm';
 import BurdenCard from '@/components/BurdenCard';
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowDown, Heart, Sparkles } from 'lucide-react';
 
 interface Burden {
   id: string;
@@ -53,6 +54,8 @@ const Index = () => {
   const isMobile = useIsMobile();
   const [burdens, setBurdens] = useState<Burden[]>(sampleBurdens);
   const [isLoading, setIsLoading] = useState(true);
+  const [showScrollHint, setShowScrollHint] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
   
   useEffect(() => {
     // Simulate fetching data
@@ -60,7 +63,26 @@ const Index = () => {
       setIsLoading(false);
     }, 1000);
     
-    return () => clearTimeout(timer);
+    // Show scroll hint after loading
+    const hintTimer = setTimeout(() => {
+      setShowScrollHint(true);
+    }, 2500);
+    
+    // Track scroll position
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+      if (window.scrollY > 200) {
+        setShowScrollHint(false);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(hintTimer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
   
   const handleSubmit = (content: string, password: string) => {
@@ -97,6 +119,20 @@ const Index = () => {
       },
     },
   };
+  
+  const scrollHintVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        repeat: Infinity,
+        repeatType: "reverse" as const,
+        duration: 1.5
+      }
+    },
+    exit: { opacity: 0, transition: { duration: 0.3 } }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -110,29 +146,82 @@ const Index = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              Share Your Burdens
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex items-center justify-center mb-2"
+            >
+              <Sparkles className="text-primary mr-2" size={24} />
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+                Share Your Burdens
+              </h1>
+              <Sparkles className="text-primary ml-2" size={24} />
+            </motion.div>
+            
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-xl text-muted-foreground max-w-2xl mx-auto"
+            >
               A safe space to anonymously share what's weighing on you and
               support others through their struggles.
-            </p>
+            </motion.p>
           </motion.div>
           
-          <BurdenForm onSubmit={handleSubmit} className="mb-16" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+          >
+            <BurdenForm onSubmit={handleSubmit} className="mb-16" />
+          </motion.div>
           
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Recent Submissions</h2>
+          <div className="mb-8 relative">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="flex items-center mb-4"
+            >
+              <h2 className="text-2xl font-semibold">Recent Submissions</h2>
+              <div className="ml-3 p-1 bg-accent rounded-full flex items-center">
+                <Heart size={14} className="text-primary mr-1" />
+                <span className="text-xs font-medium">
+                  {burdens.reduce((total, burden) => total + burden.hugs, 0)} Hugs
+                </span>
+              </div>
+            </motion.div>
+            
             <p className="text-muted-foreground mb-8">
               Read what others have shared and offer support with a virtual hug.
             </p>
             
+            <AnimatePresence>
+              {showScrollHint && scrollPosition < 200 && (
+                <motion.div 
+                  variants={scrollHintVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 flex flex-col items-center text-muted-foreground/70"
+                >
+                  <span className="text-sm mb-2">Scroll to explore more</span>
+                  <ArrowDown size={20} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map((i) => (
-                  <div 
+                  <motion.div 
                     key={i} 
-                    className="glass p-6 rounded-2xl animate-pulse h-48"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.5 }}
+                    transition={{ duration: 0.3, repeat: Infinity, repeatType: "reverse" }}
+                    className="glass p-6 rounded-2xl h-48"
                   />
                 ))}
               </div>
