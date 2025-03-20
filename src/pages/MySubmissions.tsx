@@ -1,13 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BurdenCard from '@/components/BurdenCard';
 import PasswordModal from '@/components/PasswordModal';
+import BackgroundDecorations from '@/components/BackgroundDecorations';
 import { Button } from '@/components/ui/button';
-import { useToast } from "@/hooks/use-toast";
-import { motion } from 'framer-motion';
+import { useToast } from '@/hooks/use-toast';
+import { Lock, LockOpen, ArrowLeft, BoxSelect } from 'lucide-react';
 
 interface Burden {
   id: string;
@@ -16,38 +17,33 @@ interface Burden {
   createdAt: Date;
 }
 
-// Improved function to find burdens by password
 const findBurdensByPassword = (password: string): Burden[] => {
   try {
-    // First check if we have any burdens stored in localStorage
     const allBurdens: Burden[] = [];
     
-    // Check demo password first
     if (password === 'demo') {
       return [
         {
           id: '101',
           content: "I've been putting on a brave face at work, but I'm dealing with severe burnout. I can't remember the last time I felt passionate about what I do.",
           hugs: 12,
-          createdAt: new Date(Date.now() - 259200000), // 3 days ago
+          createdAt: new Date(Date.now() - 259200000),
         },
         {
           id: '102',
           content: "My parents keep asking when I'm going to get married and have kids. I don't know how to tell them I might never want either of those things.",
           hugs: 8,
-          createdAt: new Date(Date.now() - 1728000000), // 20 days ago
+          createdAt: new Date(Date.now() - 1728000000),
         },
       ];
     }
     
-    // Loop through localStorage to find items that match our burden pattern
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith('burden_')) {
         try {
           const burdenData = JSON.parse(localStorage.getItem(key) || '{}');
           
-          // Check if this burden was created with the password we're looking for
           if (burdenData.password === password) {
             allBurdens.push({
               id: key.replace('burden_', ''),
@@ -58,12 +54,10 @@ const findBurdensByPassword = (password: string): Burden[] => {
           }
         } catch (e) {
           console.error("Error parsing burden data:", e);
-          // Continue to next item if there's an error
         }
       }
     }
     
-    // Sort burdens by date, newest first
     return allBurdens.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   } catch (e) {
     console.error("Error finding burdens:", e);
@@ -79,7 +73,6 @@ const MySubmissions = () => {
   const [hasVerified, setHasVerified] = useState(false);
   
   useEffect(() => {
-    // Check if we have a saved password from last session
     const lastPassword = localStorage.getItem('last_used_password');
     if (lastPassword) {
       handlePasswordSubmit(lastPassword);
@@ -87,14 +80,12 @@ const MySubmissions = () => {
   }, []);
   
   useEffect(() => {
-    // If user closes modal without entering password, redirect to home
     if (!showPasswordModal && !hasVerified) {
       navigate('/');
     }
   }, [showPasswordModal, hasVerified, navigate]);
   
   const handlePasswordSubmit = (password: string) => {
-    // In a real app, you would verify this password against stored credentials
     const foundBurdens = findBurdensByPassword(password);
     
     if (foundBurdens.length > 0) {
@@ -127,9 +118,10 @@ const MySubmissions = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <BackgroundDecorations />
       <Header />
       
-      <main className="flex-1 pt-20 pb-10">
+      <main className="flex-1 pt-20 pb-10 relative z-10">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

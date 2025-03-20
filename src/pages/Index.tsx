@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BurdenForm from '@/components/BurdenForm';
 import BurdenCard from '@/components/BurdenCard';
+import BackgroundDecorations from '@/components/BackgroundDecorations';
 import { toast } from "@/hooks/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -176,10 +176,11 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <BackgroundDecorations />
       <Header />
       
-      <main className="flex-1 pt-20 pb-10">
+      <main className="flex-1 pt-20 pb-10 relative z-10">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

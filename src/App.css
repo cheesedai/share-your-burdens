@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +40,24 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Apple-inspired design elements */
+.apple-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.apple-shadow {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient backgrounds */
+.bg-apple-gradient {
+  background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(240,242,245,0.8) 100%);
+}
+
+.bg-subtle-accent {
+  background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+  opacity: 0.05;
 }
