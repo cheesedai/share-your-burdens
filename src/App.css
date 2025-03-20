@@ -61,3 +61,46 @@
   background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
   opacity: 0.05;
 }
+
+/* Burden theme specific styles */
+.burden-card-hover {
+  transition: all 0.3s ease;
+}
+
+.burden-card-hover:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+/* Subtle weight animation */
+@keyframes floating-weight {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.floating-weight {
+  animation: floating-weight 4s ease-in-out infinite;
+}
+
+/* Emotional release effect */
+.emotional-release {
+  position: relative;
+  overflow: hidden;
+}
+
+.emotional-release::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.emotional-release:hover::after {
+  opacity: 1;
+}

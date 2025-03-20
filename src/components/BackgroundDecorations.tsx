@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Circle, Cloud, Star, Sparkles } from 'lucide-react';
+import { Weight, CloudRain, Frown, Package, HandHelping } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const BackgroundDecorations: React.FC = () => {
@@ -13,7 +13,7 @@ const BackgroundDecorations: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
       >
-        <Sparkles size={120} strokeWidth={1} />
+        <Weight size={120} strokeWidth={1} />
       </motion.div>
       
       {/* Bottom-left decoration */}
@@ -23,7 +23,7 @@ const BackgroundDecorations: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, delay: 0.3 }}
       >
-        <Star size={80} strokeWidth={1} />
+        <CloudRain size={80} strokeWidth={1} />
       </motion.div>
       
       {/* Middle-right decoration */}
@@ -33,7 +33,7 @@ const BackgroundDecorations: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, delay: 0.6 }}
       >
-        <Circle size={180} strokeWidth={1} />
+        <Package size={180} strokeWidth={1} />
       </motion.div>
       
       {/* Top-left decoration */}
@@ -43,7 +43,17 @@ const BackgroundDecorations: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, delay: 0.9 }}
       >
-        <Cloud size={100} strokeWidth={1} />
+        <Frown size={100} strokeWidth={1} />
+      </motion.div>
+      
+      {/* Center-bottom decoration */}
+      <motion.div 
+        className="absolute bottom-[10%] left-[45%] text-muted-foreground/10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 1.2 }}
+      >
+        <HandHelping size={120} strokeWidth={1} />
       </motion.div>
       
       {/* Floating elements */}
@@ -71,6 +81,36 @@ const BackgroundDecorations: React.FC = () => {
                 repeatType: "reverse",
                 ease: "easeInOut",
                 delay: i * 0.3,
+              }
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Add subtle rain-like elements to symbolize emotional release */}
+      <div className="absolute inset-0">
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={`rain-${i}`}
+            className="absolute w-[1px] h-[20px] bg-primary/10"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `-20px`,
+            }}
+            animate={{
+              y: [0, window.innerHeight],
+              opacity: [0, 0.5, 0]
+            }}
+            transition={{
+              y: {
+                duration: 7 + Math.random() * 10,
+                repeat: Infinity,
+                delay: i * 0.7,
+              },
+              opacity: {
+                duration: 7 + Math.random() * 10,
+                repeat: Infinity,
+                delay: i * 0.7,
               }
             }}
           />
