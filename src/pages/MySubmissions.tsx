@@ -16,28 +16,59 @@ interface Burden {
   createdAt: Date;
 }
 
-// You would replace this with actual database lookup in a real app
+// Improved function to find burdens by password
 const findBurdensByPassword = (password: string): Burden[] => {
-  // This is just a simulation - in a real app, this would query a database
-  if (password === 'demo') {
-    return [
-      {
-        id: '101',
-        content: "I've been putting on a brave face at work, but I'm dealing with severe burnout. I can't remember the last time I felt passionate about what I do.",
-        hugs: 12,
-        createdAt: new Date(Date.now() - 259200000), // 3 days ago
-      },
-      {
-        id: '102',
-        content: "My parents keep asking when I'm going to get married and have kids. I don't know how to tell them I might never want either of those things.",
-        hugs: 8,
-        createdAt: new Date(Date.now() - 1728000000), // 20 days ago
-      },
-    ];
+  try {
+    // First check if we have any burdens stored in localStorage
+    const allBurdens: Burden[] = [];
+    
+    // Check demo password first
+    if (password === 'demo') {
+      return [
+        {
+          id: '101',
+          content: "I've been putting on a brave face at work, but I'm dealing with severe burnout. I can't remember the last time I felt passionate about what I do.",
+          hugs: 12,
+          createdAt: new Date(Date.now() - 259200000), // 3 days ago
+        },
+        {
+          id: '102',
+          content: "My parents keep asking when I'm going to get married and have kids. I don't know how to tell them I might never want either of those things.",
+          hugs: 8,
+          createdAt: new Date(Date.now() - 1728000000), // 20 days ago
+        },
+      ];
+    }
+    
+    // Loop through localStorage to find items that match our burden pattern
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('burden_')) {
+        try {
+          const burdenData = JSON.parse(localStorage.getItem(key) || '{}');
+          
+          // Check if this burden was created with the password we're looking for
+          if (burdenData.password === password) {
+            allBurdens.push({
+              id: key.replace('burden_', ''),
+              content: burdenData.content,
+              hugs: burdenData.hugs || 0,
+              createdAt: new Date(burdenData.createdAt || Date.now()),
+            });
+          }
+        } catch (e) {
+          console.error("Error parsing burden data:", e);
+          // Continue to next item if there's an error
+        }
+      }
+    }
+    
+    // Sort burdens by date, newest first
+    return allBurdens.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  } catch (e) {
+    console.error("Error finding burdens:", e);
+    return [];
   }
-  
-  // Return empty array for any other password (in a real app this would check the database)
-  return [];
 };
 
 const MySubmissions = () => {
@@ -46,6 +77,14 @@ const MySubmissions = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(true);
   const [myBurdens, setMyBurdens] = useState<Burden[]>([]);
   const [hasVerified, setHasVerified] = useState(false);
+  
+  useEffect(() => {
+    // Check if we have a saved password from last session
+    const lastPassword = localStorage.getItem('last_used_password');
+    if (lastPassword) {
+      handlePasswordSubmit(lastPassword);
+    }
+  }, []);
   
   useEffect(() => {
     // If user closes modal without entering password, redirect to home

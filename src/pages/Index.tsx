@@ -58,6 +58,37 @@ const Index = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   
   useEffect(() => {
+    // Load any user-submitted burdens from localStorage
+    try {
+      const userBurdens: Burden[] = [];
+      
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('burden_')) {
+          try {
+            const burdenData = JSON.parse(localStorage.getItem(key) || '{}');
+            userBurdens.push({
+              id: key.replace('burden_', ''),
+              content: burdenData.content,
+              hugs: burdenData.hugs || 0,
+              createdAt: new Date(burdenData.createdAt || Date.now()),
+            });
+          } catch (e) {
+            console.error("Error parsing burden data:", e);
+          }
+        }
+      }
+      
+      // Combine sample burdens with user burdens, sort by date
+      const allBurdens = [...sampleBurdens, ...userBurdens].sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      );
+      
+      setBurdens(allBurdens);
+    } catch (e) {
+      console.error("Error loading burdens:", e);
+    }
+    
     // Simulate fetching data
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -86,16 +117,26 @@ const Index = () => {
   }, []);
   
   const handleSubmit = (content: string, password: string) => {
+    const newBurdenId = Date.now().toString();
     const newBurden: Burden = {
-      id: Date.now().toString(),
+      id: newBurdenId,
       content,
       hugs: 0,
       createdAt: new Date(),
     };
     
-    // In a real app, you would save the password associated with this submission
-    // to a database along with the burden content
+    // Store the burden in localStorage with its password
+    const burdenData = {
+      content,
+      hugs: 0,
+      createdAt: new Date().toISOString(),
+      password: password || '', // Store the password with the burden
+    };
     
+    // Save to localStorage
+    localStorage.setItem(`burden_${newBurdenId}`, JSON.stringify(burdenData));
+    
+    // Update state
     setBurdens(prev => [newBurden, ...prev]);
     
     // If password was provided
@@ -105,8 +146,8 @@ const Index = () => {
         description: "You can use this password to view your submissions later.",
       });
       
-      // In a real app, you would save this to localStorage or similar
-      localStorage.setItem(`burden_${newBurden.id}_password`, password);
+      // Save the last used password
+      localStorage.setItem('last_used_password', password);
     }
   };
 
