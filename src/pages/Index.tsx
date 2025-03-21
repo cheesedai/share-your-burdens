@@ -72,15 +72,6 @@ const Index = () => {
       <main className="flex-1 pt-20 pb-10 relative z-10">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <IntroSection onSubmit={handleSubmit} />
-          
-          {/* Improved visibility section for burdens */}
-          <div className="mt-12 mb-4 text-center">
-            <h2 className="text-2xl font-bold mb-4">Read Other People's Burdens</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              You're not alone. Discover what others are going through and offer support with a virtual hug.
-            </p>
-          </div>
-          
           <BurdenList 
             burdens={burdens}
             isLoading={isLoading}
