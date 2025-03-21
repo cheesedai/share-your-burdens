@@ -1,4 +1,7 @@
-# Welcome to your Lovable project
+
+# Share Your Burdens
+
+A safe space for anonymous sharing and support. We believe in the healing power of sharing our struggles with others.
 
 ## Project info
 
@@ -36,33 +39,40 @@ npm i
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Framer Motion
 
-## How can I deploy this project?
+## How to deploy to GitHub Pages
 
-Simply open [Lovable](https://lovable.dev/projects/2fee75a4-876f-4900-972b-c7b1ae876c5e) and click on Share -> Publish.
+### Option 1: Use GitHub Actions (Recommended)
+
+1. Push your code to GitHub
+2. Go to your repository settings and enable GitHub Pages on the gh-pages branch
+3. The GitHub Action will automatically build and deploy your site when you push to main
+
+### Option 2: Manual Deployment
+
+Run the deploy script:
+
+```sh
+# Make the script executable
+chmod +x deploy.sh
+
+# Run the deployment script
+./deploy.sh
+```
+
+This will build your project and push it to the gh-pages branch of your repository.
+
+Your site will be available at: `https://yourusername.github.io/share-your-burdens/`
 
 ## I want to use a custom domain - is that possible?
 
