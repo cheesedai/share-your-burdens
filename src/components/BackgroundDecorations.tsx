@@ -1,124 +1,121 @@
 
 import React from 'react';
-import { Weight, CloudRain, Frown, Package, HandHelping } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const BackgroundDecorations: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      {/* Top-right decoration */}
-      <motion.div 
-        className="absolute top-20 right-[10%] text-primary/10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5 }}
-      >
-        <Weight size={120} strokeWidth={1} />
-      </motion.div>
-      
-      {/* Bottom-left decoration */}
-      <motion.div 
-        className="absolute bottom-20 left-[5%] text-primary/10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 0.3 }}
-      >
-        <CloudRain size={80} strokeWidth={1} />
-      </motion.div>
-      
-      {/* Middle-right decoration */}
-      <motion.div 
-        className="absolute top-[40%] right-[5%] text-accent-foreground/5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 0.6 }}
-      >
-        <Package size={180} strokeWidth={1} />
-      </motion.div>
-      
-      {/* Top-left decoration */}
-      <motion.div 
-        className="absolute top-[15%] left-[8%] text-muted-foreground/10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 0.9 }}
-      >
-        <Frown size={100} strokeWidth={1} />
-      </motion.div>
-      
-      {/* Center-bottom decoration */}
-      <motion.div 
-        className="absolute bottom-[10%] left-[45%] text-muted-foreground/10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 1.2 }}
-      >
-        <HandHelping size={120} strokeWidth={1} />
-      </motion.div>
-      
-      {/* Floating elements */}
+      {/* Flowing lines */}
       <div className="absolute inset-0">
-        {[...Array(8)].map((_, i) => (
+        {[...Array(6)].map((_, i) => (
           <motion.div
-            key={i}
-            className="absolute rounded-full bg-primary/5"
+            key={`line-${i}`}
+            className="absolute h-[1px] bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0"
             style={{
-              width: Math.random() * 20 + 10,
-              height: Math.random() * 20 + 10,
-              left: `${Math.random() * 90 + 5}%`,
-              top: `${Math.random() * 90 + 5}%`,
+              left: 0,
+              right: 0,
+              top: `${15 + i * 15}%`,
+              opacity: 0.4 + (i % 3) * 0.1,
             }}
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: 0.3 + (Math.random() * 0.4),
-              y: [0, -15, 0],
+            animate={{
+              x: ['-5%', '5%', '-5%'],
+              scaleY: [1, 2, 1],
             }}
             transition={{
-              opacity: { duration: 1, delay: i * 0.2 },
-              y: { 
-                duration: 3 + Math.random() * 3, 
+              duration: 15 + i * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.8,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Soft floating circles */}
+      <div className="absolute inset-0">
+        {[...Array(12)].map((_, i) => {
+          const size = Math.random() * 140 + 60;
+          return (
+            <motion.div
+              key={`circle-${i}`}
+              className="absolute rounded-full bg-accent/10"
+              style={{
+                width: size,
+                height: size,
+                left: `${Math.random() * 90}%`,
+                top: `${Math.random() * 90}%`,
+                opacity: 0.1 + (Math.random() * 0.2),
+              }}
+              animate={{ 
+                y: [0, -20, 0],
+                scale: [1, 1.05, 1],
+                opacity: [0.1 + (Math.random() * 0.2), 0.15 + (Math.random() * 0.2), 0.1 + (Math.random() * 0.2)],
+              }}
+              transition={{
+                duration: 10 + Math.random() * 15, 
                 repeat: Infinity,
                 repeatType: "reverse",
                 ease: "easeInOut",
-                delay: i * 0.3,
-              }
-            }}
-          />
-        ))}
+                delay: i * 0.6,
+              }}
+            />
+          );
+        })}
       </div>
-      
-      {/* Add subtle rain-like elements to symbolize emotional release */}
+
+      {/* Gentle waves */}
       <div className="absolute inset-0">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(4)].map((_, i) => (
           <motion.div
-            key={`rain-${i}`}
-            className="absolute w-[1px] h-[20px] bg-primary/10"
+            key={`wave-${i}`}
+            className="absolute h-[40px] w-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `-20px`,
+              bottom: `${10 + i * 12}%`,
+              opacity: 0.1,
+              background: `linear-gradient(90deg, transparent 0%, rgba(125, 160, 200, ${0.1 - i * 0.02}) 20%, rgba(125, 160, 200, ${0.1 - i * 0.02}) 80%, transparent 100%)`,
             }}
             animate={{
-              y: [0, window.innerHeight],
-              opacity: [0, 0.5, 0]
+              x: ['-3%', '3%', '-3%'],
             }}
             transition={{
-              y: {
-                duration: 7 + Math.random() * 10,
-                repeat: Infinity,
-                delay: i * 0.7,
-              },
-              opacity: {
-                duration: 7 + Math.random() * 10,
-                repeat: Infinity,
-                delay: i * 0.7,
-              }
+              duration: 18 + i * 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 1.5,
             }}
           />
         ))}
       </div>
-      
-      {/* Soft gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background/0 via-background/0 to-primary/5 opacity-30" />
+
+      {/* Vertical soft lines */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={`vline-${i}`}
+            className="absolute w-[1px] bg-gradient-to-b from-secondary/0 via-secondary/20 to-secondary/0"
+            style={{
+              left: `${8 + i * 8}%`,
+              top: 0,
+              bottom: 0,
+              opacity: 0.2,
+            }}
+            animate={{
+              height: ['70%', '90%', '70%'],
+              y: ['10%', '5%', '10%'],
+            }}
+            transition={{
+              duration: 12 + Math.random() * 8,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+              delay: i * 0.3,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Soft blurred gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/0 via-background/20 to-primary/5 opacity-30" />
     </div>
   );
 };
