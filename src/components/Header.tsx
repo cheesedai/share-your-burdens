@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Heart, Coffee, Home, User } from 'lucide-react';
+import { Heart, Home, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface HeaderProps {
@@ -112,25 +112,6 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
             >
               <User size={16} />
               <span className="hidden sm:inline">My Submissions</span>
-            </Link>
-          </motion.div>
-          
-          <motion.div
-            custom={3}
-            variants={navItemVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link 
-              to="https://www.buymeacoffee.com" 
-              target="_blank"
-              rel="noopener noreferrer" 
-              className="flex items-center space-x-2 text-sm font-medium px-4 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              <Coffee size={16} />
-              <span className="hidden sm:inline">Buy Me a Coffee</span>
             </Link>
           </motion.div>
         </nav>
