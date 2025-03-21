@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Heart, MessageCircle } from 'lucide-react';
+import { Heart, MessageCircle, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
@@ -25,6 +25,10 @@ const BurdenCard: React.FC<BurdenCardProps> = ({
   const [hugCount, setHugCount] = useState(hugs);
   const [isHugging, setIsHugging] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  // Generate a view count based on the ID to simulate statistics
+  // This creates a deterministic but seemingly random view count
+  const viewCount = Math.floor((parseInt(id) % 100) + 5 * (hugCount + 2));
   
   const handleHug = () => {
     if (isHugging) return;
@@ -143,8 +147,9 @@ const BurdenCard: React.FC<BurdenCardProps> = ({
           </motion.span>
         </motion.button>
         
-        <div className="text-xs text-muted-foreground">
-          {id.substring(0, 6)}
+        <div className="flex items-center text-xs text-muted-foreground gap-1">
+          <Eye size={14} className="opacity-70" />
+          <span>{viewCount}</span>
         </div>
       </div>
     </motion.div>
