@@ -5,117 +5,174 @@ import { motion } from 'framer-motion';
 const BackgroundDecorations: React.FC = () => {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      {/* Flowing lines */}
+      {/* 动态光晕效果 */}
       <div className="absolute inset-0">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(4)].map((_, i) => (
           <motion.div
-            key={`line-${i}`}
-            className="absolute h-[1px] bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0"
+            key={`glow-${i}`}
+            className="absolute rounded-full blur-[100px]"
             style={{
-              left: 0,
-              right: 0,
-              top: `${15 + i * 15}%`,
-              opacity: 0.4 + (i % 3) * 0.1,
+              background: i % 2 === 0 
+                ? 'linear-gradient(135deg, rgba(129, 161, 242, 0.15), rgba(100, 198, 255, 0.1))' 
+                : 'linear-gradient(135deg, rgba(255, 168, 168, 0.1), rgba(234, 166, 255, 0.08))',
+              width: `${300 + i * 150}px`,
+              height: `${300 + i * 150}px`,
+              left: `${15 + i * 20}%`,
+              top: `${20 + (i % 3) * 25}%`,
+              opacity: 0.4,
             }}
             animate={{
-              x: ['-5%', '5%', '-5%'],
-              scaleY: [1, 2, 1],
+              scale: [1, 1.1, 1],
+              opacity: [0.3, 0.5, 0.3],
+              x: [0, 30, 0],
+              y: [0, -30, 0],
             }}
             transition={{
-              duration: 15 + i * 2,
+              duration: 20 + i * 5,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.8,
+              delay: i * 2,
             }}
           />
         ))}
       </div>
 
-      {/* Soft floating circles */}
+      {/* 动态线条效果 */}
       <div className="absolute inset-0">
-        {[...Array(12)].map((_, i) => {
-          const size = Math.random() * 140 + 60;
+        {[...Array(15)].map((_, i) => {
+          const isHorizontal = i % 2 === 0;
+          const length = 100 + Math.random() * 200;
+          
           return (
             <motion.div
-              key={`circle-${i}`}
-              className="absolute rounded-full bg-accent/10"
+              key={`line-${i}`}
+              className="absolute bg-gradient-to-r rounded-full"
               style={{
-                width: size,
-                height: size,
-                left: `${Math.random() * 90}%`,
-                top: `${Math.random() * 90}%`,
-                opacity: 0.1 + (Math.random() * 0.2),
+                background: isHorizontal 
+                  ? `linear-gradient(90deg, transparent, rgba(${100 + i * 10}, ${140 + i * 5}, 255, 0.2) 50%, transparent)`
+                  : `linear-gradient(180deg, transparent, rgba(${255 - i * 10}, ${180 + i * 3}, 255, 0.15) 50%, transparent)`,
+                width: isHorizontal ? `${length}px` : '1px',
+                height: isHorizontal ? '1px' : `${length}px`,
+                left: `${Math.random() * 85}%`,
+                top: `${Math.random() * 85}%`,
+                opacity: 0.2 + (Math.random() * 0.4),
               }}
-              animate={{ 
-                y: [0, -20, 0],
-                scale: [1, 1.05, 1],
-                opacity: [0.1 + (Math.random() * 0.2), 0.15 + (Math.random() * 0.2), 0.1 + (Math.random() * 0.2)],
+              animate={{
+                x: isHorizontal ? ['-20px', '20px', '-20px'] : 0,
+                y: !isHorizontal ? ['-20px', '20px', '-20px'] : 0,
+                opacity: [0.1, 0.4, 0.1],
+                scale: [1, 1.2, 1],
               }}
               transition={{
-                duration: 10 + Math.random() * 15, 
+                duration: 8 + Math.random() * 12,
                 repeat: Infinity,
-                repeatType: "reverse",
                 ease: "easeInOut",
-                delay: i * 0.6,
+                delay: i * 0.3,
               }}
             />
           );
         })}
       </div>
 
-      {/* Gentle waves */}
+      {/* 装饰性气泡元素 */}
       <div className="absolute inset-0">
-        {[...Array(4)].map((_, i) => (
+        {[...Array(25)].map((_, i) => {
+          const size = 3 + Math.random() * 8;
+          return (
+            <motion.div
+              key={`bubble-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                left: `${Math.random() * 95}%`,
+                top: `${Math.random() * 95}%`,
+                background: `rgba(${150 + Math.random() * 100}, ${150 + Math.random() * 100}, ${220 + Math.random() * 35}, ${0.2 + Math.random() * 0.3})`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                x: [0, Math.random() > 0.5 ? 10 : -10, 0],
+                opacity: [0.1, 0.7, 0.1],
+              }}
+              transition={{
+                duration: 5 + Math.random() * 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.2,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* 波浪纹效果 */}
+      <div className="absolute inset-0">
+        {[...Array(5)].map((_, i) => (
           <motion.div
             key={`wave-${i}`}
-            className="absolute h-[40px] w-full"
+            className="absolute rounded-full"
             style={{
-              bottom: `${10 + i * 12}%`,
-              opacity: 0.1,
-              background: `linear-gradient(90deg, transparent 0%, rgba(125, 160, 200, ${0.1 - i * 0.02}) 20%, rgba(125, 160, 200, ${0.1 - i * 0.02}) 80%, transparent 100%)`,
+              background: `linear-gradient(90deg, transparent, rgba(210, 230, 255, ${0.05 - i * 0.01}) 20%, rgba(210, 230, 255, ${0.05 - i * 0.01}) 80%, transparent)`,
+              height: '100px',
+              width: '100%',
+              left: 0,
+              top: `${20 + i * 15}%`,
+              opacity: 0.6,
             }}
             animate={{
-              x: ['-3%', '3%', '-3%'],
+              scaleX: [0.8, 1.1, 0.8],
+              scaleY: [1, 1.2, 1],
+              y: [0, -30, 0],
             }}
             transition={{
-              duration: 18 + i * 5,
+              duration: 20 + i * 3,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 1.5,
+              delay: i * 2,
             }}
           />
         ))}
       </div>
 
-      {/* Vertical soft lines */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={`vline-${i}`}
-            className="absolute w-[1px] bg-gradient-to-b from-secondary/0 via-secondary/20 to-secondary/0"
-            style={{
-              left: `${8 + i * 8}%`,
-              top: 0,
-              bottom: 0,
-              opacity: 0.2,
-            }}
-            animate={{
-              height: ['70%', '90%', '70%'],
-              y: ['10%', '5%', '10%'],
-            }}
-            transition={{
-              duration: 12 + Math.random() * 8,
-              repeat: Infinity,
-              repeatType: "mirror",
-              ease: "easeInOut",
-              delay: i * 0.3,
-            }}
-          />
-        ))}
+      {/* 大型装饰元素 */}
+      <div className="absolute inset-0">
+        {[...Array(3)].map((_, i) => {
+          const size = 200 + i * 100;
+          return (
+            <motion.div
+              key={`decor-${i}`}
+              className="absolute rounded-full opacity-10"
+              style={{
+                width: size,
+                height: size,
+                border: `1px solid rgba(${180 + i * 20}, ${200 + i * 20}, 255, 0.2)`,
+                left: `${10 + i * 30}%`,
+                top: `${20 + i * 20}%`,
+              }}
+              animate={{
+                rotate: [0, 360],
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                rotate: {
+                  duration: 40 + i * 10,
+                  repeat: Infinity,
+                  ease: "linear",
+                },
+                scale: {
+                  duration: 15 + i * 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatType: "reverse",
+                }
+              }}
+            />
+          );
+        })}
       </div>
 
-      {/* Soft blurred gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background/0 via-background/20 to-primary/5 opacity-30" />
+      {/* 柔和光效 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/0 via-background/10 to-primary/5 opacity-30" />
     </div>
   );
 };
