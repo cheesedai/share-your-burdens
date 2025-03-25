@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  base: isGitHubPages ? '/your-repo-name/' : '/', // Update 'your-repo-name' to your actual repository name
+  base: isGitHubPages ? '/share-your-burdens/' : '/', // 已更正为您的仓库名称
   plugins: [
     react(),
     mode === 'development' &&
