@@ -24,14 +24,26 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     
-    <!-- Base URL for GitHub Pages -->
-    <base href="%PUBLIC_URL%/" />
-    
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     
     <!-- Keywords for SEO -->
     <meta name="keywords" content="anonymous sharing, support, mental health, community, burden sharing, emotional support, online community, safe space, anonymous confessions, venting" />
+    
+    <!-- Script to handle GitHub Pages SPA routing -->
+    <script type="text/javascript">
+      (function() {
+        // Redirect in GitHub Pages to handle SPA routing
+        const l = window.location;
+        if (l.pathname.split('/').length > 2 && !l.hash && l.hostname.includes('github.io')) {
+          window.location.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            l.pathname.split('/').slice(0, 2).join('/') + '/#' +
+            l.pathname.split('/').slice(2).join('/')
+          );
+        }
+      })();
+    </script>
   </head>
 
   <body>

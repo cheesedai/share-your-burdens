@@ -35,23 +35,19 @@ const AnimatedRoutes = () => {
   );
 };
 
-// 检测是否在GitHub Pages环境中
-const isGitHubPages = window.location.hostname.includes('github.io');
+// 检测是否在GitHub Pages环境中（更可靠的检测方法）
+const isGitHubPages = window.location.hostname.includes('github.io') || 
+                      window.location.href.includes('github.io');
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {isGitHubPages ? (
-        <HashRouter>
-          <AnimatedRoutes />
-        </HashRouter>
-      ) : (
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
-      )}
+      {/* 在GitHub Pages上始终使用HashRouter */}
+      <HashRouter>
+        <AnimatedRoutes />
+      </HashRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
