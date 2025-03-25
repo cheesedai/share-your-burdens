@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation, HashRouter } from "react-router-dom";
+import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
 import MySubmissions from "./pages/MySubmissions";
@@ -35,16 +35,11 @@ const AnimatedRoutes = () => {
   );
 };
 
-// 检测是否在GitHub Pages环境中（更可靠的检测方法）
-const isGitHubPages = window.location.hostname.includes('github.io') || 
-                      window.location.href.includes('github.io');
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {/* 在GitHub Pages上始终使用HashRouter */}
       <HashRouter>
         <AnimatedRoutes />
       </HashRouter>
