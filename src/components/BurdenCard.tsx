@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
-import { Heart, MessageCircle, Eye } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { useToast } from "@/hooks/use-toast";
+import { recordBurdenView, updateHugsCount } from '@/utils/burdenData';
 
 interface BurdenCardProps {
   id: string;
@@ -12,6 +13,7 @@ interface BurdenCardProps {
   hugs: number;
   createdAt: Date;
   className?: string;
+  views?: number;
 }
 
 const BurdenCard: React.FC<BurdenCardProps> = ({ 
@@ -19,22 +21,31 @@ const BurdenCard: React.FC<BurdenCardProps> = ({
   content, 
   hugs, 
   createdAt, 
-  className 
+  className,
+  views = 0
 }) => {
   const { toast } = useToast();
   const [hugCount, setHugCount] = useState(hugs);
   const [isHugging, setIsHugging] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [viewCount, setViewCount] = useState(views);
   
-  // Generate a view count based on the ID to simulate statistics
-  // This creates a deterministic but seemingly random view count
-  const viewCount = Math.floor((parseInt(id) % 100) + 5 * (hugCount + 2));
+  useEffect(() => {
+    // Record view when card is shown
+    recordBurdenView(id);
+  }, [id]);
   
   const handleHug = () => {
     if (isHugging) return;
     
     setIsHugging(true);
-    setHugCount(prev => prev + 1);
+    
+    // Update local state
+    const newCount = hugCount + 1;
+    setHugCount(newCount);
+    
+    // Update in localStorage
+    updateHugsCount(id);
     
     // Animation for heart
     const hearts = ['❤️', '💖', '💕', '💓', '💗'];

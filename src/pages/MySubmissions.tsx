@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -15,6 +16,7 @@ interface Burden {
   content: string;
   hugs: number;
   createdAt: Date;
+  views?: number;
 }
 
 const findBurdensByPassword = (password: string): Burden[] => {
@@ -25,15 +27,17 @@ const findBurdensByPassword = (password: string): Burden[] => {
       return [
         {
           id: '101',
-          content: "I've been putting on a brave face at work, but I'm dealing with severe burnout. I can't remember the last time I felt passionate about what I do.",
+          content: "我在工作中一直面带微笑，但实际上我正经历着严重的职业倦怠。我已经记不清上一次对工作充满热情是什么时候了。",
           hugs: 12,
           createdAt: new Date(Date.now() - 259200000),
+          views: 85,
         },
         {
           id: '102',
-          content: "My parents keep asking when I'm going to get married and have kids. I don't know how to tell them I might never want either of those things.",
+          content: "我的父母一直问我什么时候结婚生子。我不知道如何告诉他们我可能永远都不想要这些。",
           hugs: 8,
           createdAt: new Date(Date.now() - 1728000000),
+          views: 76,
         },
       ];
     }
@@ -50,6 +54,7 @@ const findBurdensByPassword = (password: string): Burden[] => {
               content: burdenData.content,
               hugs: burdenData.hugs || 0,
               createdAt: new Date(burdenData.createdAt || Date.now()),
+              views: burdenData.views || 0,
             });
           }
         } catch (e) {
@@ -94,13 +99,13 @@ const MySubmissions = () => {
       setShowPasswordModal(false);
       
       toast({
-        title: "Password verified",
-        description: `Found ${foundBurdens.length} submission(s) associated with your password.`,
+        title: "密码验证成功",
+        description: `找到与您密码关联的 ${foundBurdens.length} 条提交。`,
       });
     } else {
       toast({
-        title: "No submissions found",
-        description: "We couldn't find any submissions associated with that password.",
+        title: "未找到提交内容",
+        description: "我们无法找到与该密码相关联的提交内容。",
         variant: "destructive",
       });
     }
@@ -130,10 +135,10 @@ const MySubmissions = () => {
             className="text-center mb-12"
           >
             <h1 className="text-4xl font-bold tracking-tight mb-4">
-              My Submissions
+              我的提交
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              View all the burdens you've shared and see how many hugs you've received.
+              查看您分享的所有心事，并了解您收到了多少拥抱和浏览量。
             </p>
           </motion.div>
           
@@ -153,17 +158,18 @@ const MySubmissions = () => {
                       content={burden.content}
                       hugs={burden.hugs}
                       createdAt={burden.createdAt}
+                      views={burden.views}
                     />
                   ))}
                 </motion.div>
               ) : (
                 <div className="text-center py-12">
-                  <h3 className="text-xl font-medium mb-2">No submissions found</h3>
+                  <h3 className="text-xl font-medium mb-2">未找到提交内容</h3>
                   <p className="text-muted-foreground mb-6">
-                    You haven't shared any burdens with this password yet.
+                    您尚未使用此密码分享任何心事。
                   </p>
                   <Button onClick={() => navigate('/')}>
-                    Share a Burden
+                    分享心事
                   </Button>
                 </div>
               )}

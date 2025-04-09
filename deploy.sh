@@ -8,9 +8,9 @@ NC='\033[0m' # No Color
 
 echo -e "${YELLOW}Starting deployment process for Share Your Burdens...${NC}"
 
-# Build the project
+# Build the project with GitHub Pages flag
 echo -e "${YELLOW}Building the project...${NC}"
-npm run build
+GITHUB_PAGES=true npm run build
 
 # Check if build was successful
 if [ $? -ne 0 ]; then
@@ -31,9 +31,6 @@ cp -r dist/* .
 # Create a .nojekyll file to prevent GitHub Pages from ignoring files that begin with an underscore
 touch .nojekyll
 
-# Create CNAME file if you have a custom domain
-# echo "yourdomain.com" > CNAME
-
 # Add all files
 echo -e "${YELLOW}Committing changes...${NC}"
 git add .
@@ -49,5 +46,5 @@ git push -f origin gh-pages
 git checkout -
 
 echo -e "${GREEN}Deployment completed successfully!${NC}"
-echo -e "${GREEN}Your site should be available at: https://YOUR_USERNAME.github.io/YOUR_REPO_NAME${NC}"
+echo -e "${GREEN}Your site should be available at: https://cheesedai.github.io/share-your-burdens/${NC}"
 echo -e "${YELLOW}Note: It might take a few minutes for the changes to propagate.${NC}"

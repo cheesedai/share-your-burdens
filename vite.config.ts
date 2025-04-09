@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  base: isGitHubPages ? '/share-your-burdens/' : '/',
+  base: '/share-your-burdens/',
   plugins: [
     react(),
     mode === 'development' &&

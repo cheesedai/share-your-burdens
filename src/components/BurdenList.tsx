@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowDown, Heart } from 'lucide-react';
+import { ArrowDown, Heart, Eye } from 'lucide-react';
 import BurdenCard from './BurdenCard';
 
 interface Burden {
@@ -9,6 +9,7 @@ interface Burden {
   content: string;
   hugs: number;
   createdAt: Date;
+  views?: number;
 }
 
 interface BurdenListProps {
@@ -48,19 +49,29 @@ const BurdenList: React.FC<BurdenListProps> = ({
     exit: { opacity: 0, transition: { duration: 0.3 } }
   };
 
+  // Calculate total hugs and views
+  const totalHugs = burdens.reduce((total, burden) => total + burden.hugs, 0);
+  const totalViews = burdens.reduce((total, burden) => total + (burden.views || 0), 0);
+
   return (
     <div className="mb-8 relative">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="flex items-center mb-4"
+        className="flex items-center mb-4 flex-wrap gap-2"
       >
         <h2 className="text-2xl font-semibold">Recent Submissions</h2>
-        <div className="ml-3 p-1 bg-accent rounded-full flex items-center">
+        <div className="p-1 bg-accent rounded-full flex items-center">
           <Heart size={14} className="text-primary mr-1" />
           <span className="text-xs font-medium">
-            {burdens.reduce((total, burden) => total + burden.hugs, 0)} Hugs
+            {totalHugs} Hugs
+          </span>
+        </div>
+        <div className="p-1 bg-accent rounded-full flex items-center">
+          <Eye size={14} className="text-blue-500 mr-1" />
+          <span className="text-xs font-medium">
+            {totalViews} Views
           </span>
         </div>
       </motion.div>
@@ -110,6 +121,7 @@ const BurdenList: React.FC<BurdenListProps> = ({
               content={burden.content}
               hugs={burden.hugs}
               createdAt={burden.createdAt}
+              views={burden.views || 0}
             />
           ))}
         </motion.div>
